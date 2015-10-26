@@ -19,13 +19,14 @@ Can be used for:
 ## API
 
 ----------------------------------------------- ------------------------------
-`mmap.map(t) -> map | nil, errmsg, errcode`     create a mapping with options
+`mmap.map(t) -> map | nil,errmsg,errcode`       create a memory mapping
 `map:flush([addr, size])`                       flush (parts of) the mapping to disk
 `map.addr`                                      a `void*` pointer to the mapped address
 `map.size`                                      the size of the mapped block
 `map.fileno`                                    the OS file handle
 `map.close_file`                                true if closing the file on `map:free()`
 `map:free()`                                    release the memory and associated resources
+`mmap.mirror(t) -> map | nil,errmsg,errcode`    create a mirrored memory mapping
 `mmap.aligned_size(size) -> size`               align a size to page boundary
 `mmap.pagesize() -> size`                       current allocation granularity
 ----------------------------------------------- ------------------------------
@@ -91,9 +92,15 @@ access results in a crash.
 If an opened file is given (`fileno` arg) then write buffers are flushed
 before mapping the file.
 
+
 ### `mmap.mirror(t) -> map | nil, errmsg, errcode`
 
 Make a mirrored memory mapping for use with a [ring buffer][lfrb].
+The `t` arg is a table with the fields:
+
+* `path` or `fileno`: the file to map: required (the access is 'w').
+* `size`: the size of the memory segment: required, automatically aligned to page size.
+* `addr`: address to use (optional).
 
 
 ### `mmap.pagesize() -> bytes`

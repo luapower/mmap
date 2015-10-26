@@ -516,7 +516,8 @@ function mmap.mirror(t)
 	local map, errmsg, errcode = mmap.map{
 		path = t.path, fileno = t.fileno,
 		size = size * times,
-		access = access}
+		access = access,
+		addr = t.addr}
 	if not map then return nil, errmsg, errcode end
 
 	--now free it so we can allocate it again in chunks all pointing at
