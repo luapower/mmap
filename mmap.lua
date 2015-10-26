@@ -14,6 +14,27 @@ function mmap.aligned_size(size)
 	return (pagecount + (pagecount < fpagecount and 1 or 0)) * pagesize
 end
 
+local function parseopt(t)
+	assert(type(t) == 'table', 'options table expected')
+
+	local access = t.access or ''
+	local access_write = access:find'w'
+	local access_copy = access:find'c'
+	local access_exec = access:find'x'
+	local size = t.size
+	local offset = t.offset or 0
+
+	assert(not (access_write and access_copy),
+		'w and c access flags are mutually exclusive')
+	assert(t.fileno or t.path or t.name or t.size, 'size expected when mapping the pagefile')
+	assert(not (t.fileno and t.path), 'fileno and path are mutually exclusive')
+	assert(not size or size > 0, 'size must be > 0')
+	assert(offset >= 0, 'offset must be >= 0')
+	assert(offset == mmap.aligned_size(offset), 'offset not aligned to page boundaries')
+
+	return size, offset, access_write, access_copy, access_exec
+end
+
 if ffi.os == 'Windows' then
 
 	--winapi types
@@ -243,22 +264,7 @@ if ffi.os == 'Windows' then
 	end
 
 	function mmap.map(t)
-		assert(type(t) == 'table', 'options table expected')
-
-		local access = t.access or ''
-		local access_write = access:find'w'
-		local access_copy = access:find'c'
-		local access_exec = access:find'x'
-		local size = t.size
-		local offset = t.offset or 0
-
-		assert(not (access_write and access_copy),
-			'w and c access flags are mutually exclusive')
-		assert(t.fileno or t.path or t.name or t.size, 'size expected when mapping the pagefile')
-		assert(not (t.fileno and t.path), 'fileno and path are mutually exclusive')
-		assert(not size or size > 0, 'size must be > 0')
-		assert(offset >= 0, 'offset must be >= 0')
-		assert(offset == mmap.aligned_size(offset), 'offset not aligned to page boundaries')
+		local size, offset, access_write, access_copy, access_exec = parseopt(t)
 
 		local hfile, own_hfile
 		if t.fileno then
@@ -379,8 +385,9 @@ elseif ffi.os == 'Linux' or ffi.os == 'OSX' then
 	local MAP_ANON = ffi.os == 'Linux' and 0x20 or 0x1000
 
 	function mmap.map(t)
-		assert(t, 'options table expected')
-		local fd = t.file
+		local size, offset, access_write, access_copy, access_exec = parseopt(t)
+
+		local fd = t.fileno
 
 		if t.name then
 			local shm_path = '/dev/shm/XXXXXX'
