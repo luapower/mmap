@@ -25,10 +25,11 @@ Can be used for:
 --------------------------------------------------------------- --------------------------------------------
 `mmap.map(t) -> map | nil,errmsg,errcode`                       create a mapping
 
-`mmap.map(path|fileno, access, size, ` \                        create a mapping
-`offset, addr, name) -> map | nil,errmsg,errcode`
+`mmap.map(path|fileno, access, size, offset,` \                 create a mapping
+`addr, name) -> map | nil,errmsg,errcode`
 
-`map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`  flush (parts of) the mapping to disk
+`map:flush([wait, ][addr, size])` \                             flush (parts of) the mapping to disk
+`-> true | nil,errmsg,errcode`
 
 `map.addr`                                                      a `void*` pointer to the mapped address
 
