@@ -22,19 +22,20 @@ Can be used for:
 
 ## API
 
------------------------------------------------------------------ --------------------------------------------
-`mmap.map(t) -> map | nil,errmsg,errcode`                         create a memory mapping
-`map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`    flush (parts of) the mapping to disk
-`map.addr`                                                        a `void*` pointer to the mapped address
-`map.size`                                                        the byte size of the mapped block
-`map.fileno`                                                      the OS file handle
-`map:free()`                                                      release the memory and associated resources
-`mmap.mirror(t) -> map | nil,errmsg,errcode`                      create a mirrored memory mapping
-`mmap.aligned_size(size) -> size`                                 align a size to page boundary
-`mmap.pagesize() -> size`                                         allocation granularity
------------------------------------------------------------------ --------------------------------------------
+------------------------------------------------------------------------------------------------------ --------------------------------------------
+`mmap.map(t) -> map | nil,errmsg,errcode`                                                              create a mapping
+`mmap.map(path|fileno|nil[, access[, size[, offset[, addr[, name]]]]]) -> map | nil,errmsg,errcode`    create a mapping
+`map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`                                         flush (parts of) the mapping to disk
+`map.addr`                                                                                             a `void*` pointer to the mapped address
+`map.size`                                                                                             the byte size of the mapped block
+`map.fileno`                                                                                           the OS file handle
+`map:free()`                                                                                           release the memory and associated resources
+`mmap.mirror(t) -> map | nil,errmsg,errcode`                                                           create a mirrored memory mapping
+`mmap.aligned_size(size) -> size`                                                                      align a size to page boundary
+`mmap.pagesize() -> size`                                                                              allocation granularity
+------------------------------------------------------------------------------------------------------ --------------------------------------------
 
-### `mmap.map(t) -> map | nil, errmsg, errcode`
+### `mmap.map(t) -> map | nil, errmsg, errcode` <br> `mmap.map(path|fileno|nil[, access[, size[, offset[, addr[, name]]]]]) -> map | nil, errmsg, errcode`
 
 Create a memory map object. The `t` arg is a table with the fields:
 
@@ -70,10 +71,11 @@ access to the same memory.
 
 Returns an object (a table) with the fields:
 
-* `map.addr` - `void*` pointer to the mapped memory
-* `map.size` - actual size of the memory block
-* `map.fileno` - OS file handle
-* `map.close_file` - if true the file will be closed on `map:free()` (read-only)
+* `map.addr` - a `void*` pointer to the mapped memory
+* `map.size` - the actual size of the memory block
+* `map.fileno` - the OS file handle
+* `map.close_file` - a read-only flag which if true, the file will be closed
+on `map:free()`.
 
 If the mapping fails, returns `nil,errmsg,errcode` where `errcode` can be:
 
@@ -88,14 +90,14 @@ Attempting to write to a memory block that wasn't mapped with write or
 copy-on-write access results in access violation (which means a crash
 since access violations are not caught by default).
 
-If an opened file is given (`fileno` arg) then write buffers are flushed
+If an opened file is given (`fileno` arg) then the write buffers are flushed
 before mapping the file.
 
 
 ### `map:free()`
 
 Free the memory and all associated resources and close the file
-if the file was opened by `mmap.map()`.
+if it was opened by `mmap.map()`.
 
 
 ### `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`
@@ -110,7 +112,8 @@ Make a mirrored memory mapping to use with a [ring buffer][lfrb].
 The `t` arg is a table with the fields:
 
 * `path` or `fileno`: the file to map: required (the access is 'w').
-* `size`: the size of the memory segment: required, automatically aligned to page size.
+* `size`: the size of the memory segment: required, automatically aligned
+to page size.
 * `times`: how many times to mirror the segment (optional, default: 2)
 * `addr`: address to use (optional).
 
