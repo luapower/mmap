@@ -22,7 +22,7 @@ Can be used for:
 
 ## API
 
-----------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------- --------------------------------------------
 `mmap.map(t) -> map | nil,errmsg,errcode`                                             create a mapping
 `mmap.map(path|fileno, access, size, offset, addr, name) -> map | nil,errmsg,errcode` create a mapping
 `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`                        flush (parts of) the mapping to disk
