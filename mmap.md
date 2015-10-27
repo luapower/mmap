@@ -26,7 +26,7 @@ Can be used for:
 `mmap.map(t) -> map | nil,errmsg,errcode`                         create a memory mapping
 `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`    flush (parts of) the mapping to disk
 `map.addr`                                                        a `void*` pointer to the mapped address
-`map.size`                                                        the size of the mapped block
+`map.size`                                                        the byte size of the mapped block
 `map.fileno`                                                      the OS file handle
 `map:free()`                                                      release the memory and associated resources
 `mmap.mirror(t) -> map | nil,errmsg,errcode`                      create a mirrored memory mapping
@@ -72,10 +72,6 @@ Returns an object (a table) with the fields:
 
 * `map.addr` - `void*` pointer to the mapped memory
 * `map.size` - actual size of the memory block
-* `map:free()` - method to free the memory and associated resources
-* `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode` - flush (part of) the memory to disk
-	* if `wait` is true, wait until the data has been written to disk
-	* returns `nil, errmsg, errcode` for failure
 * `map.fileno` - OS file handle
 * `map.close_file` - if true the file will be closed on `map:free()` (read-only)
 
@@ -96,6 +92,18 @@ If an opened file is given (`fileno` arg) then write buffers are flushed
 before mapping the file.
 
 
+### `map:free()`
+
+Free the memory and all associated resources and close the file
+if the file was opened by `mmap.map()`.
+
+
+### `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`
+
+Flush (part of) the memory to disk.
+If `wait` is true, wait until the data has been written to disk.
+
+
 ### `mmap.mirror(t) -> map | nil, errmsg, errcode`
 
 Make a mirrored memory mapping to use with a [ring buffer][lfrb].
@@ -111,6 +119,7 @@ objects in its array part (freeing the mirror will free all the maps).
 The memory block at `addr` is mirrored such that
 `(char*)addr[o1*i] == (char*)addr[o2*i]` for any `o1` and `o2` in
 `0..times-1` and for any `i` in `0..size-1`.
+
 
 ### `mmap.pagesize() -> bytes`
 
