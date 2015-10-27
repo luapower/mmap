@@ -41,9 +41,9 @@ Can be used for:
 
 `mmap.mirror(t) -> map | nil,errmsg,errcode`      create a mirrored memory mapping
 
-`mmap.aligned_size(size) -> size`                 align a size to page boundary
+`mmap.aligned_size(bytes) -> bytes`               next page-aligned size
 
-`mmap.pagesize() -> size`                         allocation granularity
+`mmap.pagesize() -> bytes`                        allocation granularity
 ------------------------------------------------- --------------------------------------------
 
 ### `mmap.map(t) -> map | nil, errmsg, errcode` <br> `mmap.map(path|fileno, access, size, offset, addr, name)` <br> `-> map | nil, errmsg, errcode`
@@ -135,6 +135,13 @@ The memory block at `addr` is mirrored such that
 `0..times-1` and for any `i` in `0..size-1`.
 
 
+### `mmap.aligned_size(bytes) -> bytes`
+
+Get the next larger size that is aligned to a page boundary.
+It can be used to align offsets and to specify sizes.
+
+
 ### `mmap.pagesize() -> bytes`
 
-Get the current page size. Mapped memory is multiple of this size.
+Get the current page size. Memory will always be allocated in multiples
+of this size and file offsets must be aligned to this size too.
