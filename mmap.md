@@ -26,7 +26,7 @@ Can be used for:
 `mmap.map(t) -> map | nil,errmsg,errcode`                       create a mapping
 
 `mmap.map(path|fileno, access, size, ` \                        create a mapping
-offset, addr, name) -> map | nil,errmsg,errcode`
+`offset, addr, name) -> map | nil,errmsg,errcode`
 
 `map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`  flush (parts of) the mapping to disk
 
