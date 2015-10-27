@@ -46,7 +46,7 @@ Can be used for:
 `mmap.pagesize() -> size`                         allocation granularity
 ------------------------------------------------- --------------------------------------------
 
-### `mmap.map(t) -> map | nil, errmsg, errcode` <br> `mmap.map(path|fileno, access, size, offset, addr, name) -> map | nil, errmsg, errcode`
+### `mmap.map(t) -> map | nil, errmsg, errcode` <br> `mmap.map(path|fileno, access, size, offset, addr, name)` <br> `-> map | nil, errmsg, errcode`
 
 Create a memory map object. The `t` arg is a table with the fields:
 
