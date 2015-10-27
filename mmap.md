@@ -53,7 +53,7 @@ Create a memory map object. The `t` arg is a table with the fields:
 * `path`: file name to open or create.
 * `fileno`: OS file handle to use instead of `path` (the file must be opened
 	with compatibile access permissions).
-	* if neither `path` nor `fileno` is given, the system's swap file is mapped.
+* if neither `path` nor `fileno` is given, the system's swap file is mapped.
 * `access`: can be either:
 	* '' (read-only, default)
 	* 'w' (read + write)
@@ -64,15 +64,15 @@ Create a memory map object. The `t` arg is a table with the fields:
 * `size`: the size of the memory segment (optional, defaults to file size).
 	* if size is given it must be > 0 or an error is raised.
 	* if size is not given, the file size is assumed.
-		* if the file is empty the mapping fails with 'file_too_short' error.
+		* if the file is empty the mapping fails with `'file_too_short'` error.
 	* if the file doesn't exist:
 		* if write access is given, the file is created.
-		* if write access is not given, the mapping fails with 'no_file' error.
+		* if write access is not given, the mapping fails with `'no_file'` error.
 	* if the file is shorter than the required offset + size:
 		* if write access is not given (or the file is the pagefile which
-		can't be resized), the mapping fails with 'file_too_short' error.
+		can't be resized), the mapping fails with `'file_too_short'` error.
 		* if write access is given, the file is extended to size.
-			* if the disk is full, the mapping fails with 'disk_full' error.
+			* if the disk is full, the mapping fails with `'disk_full'` error.
 * `offset`: offset in the file (optional, defaults to 0).
 	* if given, the offset must be >= 0 or an error is raised.
 	* the offset must be aligned to a page boundary or an error is raised.
@@ -90,11 +90,11 @@ on `map:free()`.
 
 If the mapping fails, returns `nil,errmsg,errcode` where `errcode` can be:
 
-* 'no_file' - file not found.
-* 'file_too_short' - the file is shorter than the required size.
-* 'disk_full' - the file cannot be extended because the disk is full.
-* 'out_of_mem' - size or address too large.
-* 'invalid_address' - specified address in use.
+* `'no_file'` - file not found.
+* `'file_too_short'` - the file is shorter than the required size.
+* `'disk_full'` - the file cannot be extended because the disk is full.
+* `'out_of_mem'` - size or address too large.
+* `'invalid_address'` - specified address in use.
 * an OS-specific numeric error code.
 
 Attempting to write to a memory block that wasn't mapped with write or
