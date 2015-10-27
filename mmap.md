@@ -22,18 +22,28 @@ Can be used for:
 
 ## API
 
-------------------------------------------------------------------------------------- --------------------------------------------
-`mmap.map(t) -> map | nil,errmsg,errcode`                                             create a mapping
-`mmap.map(path|fileno, access, size, offset, addr, name) -> map | nil,errmsg,errcode` create a mapping
-`map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`                        flush (parts of) the mapping to disk
-`map.addr`                                                                            a `void*` pointer to the mapped address
-`map.size`                                                                            the byte size of the mapped block
-`map.fileno`                                                                          the OS file handle
-`map:free()`                                                                          release the memory and associated resources
-`mmap.mirror(t) -> map | nil,errmsg,errcode`                                          create a mirrored memory mapping
-`mmap.aligned_size(size) -> size`                                                     align a size to page boundary
-`mmap.pagesize() -> size`                                                             allocation granularity
-------------------------------------------------------------------------------------- --------------------------------------------
+--------------------------------------------------------------- --------------------------------------------
+`mmap.map(t) -> map | nil,errmsg,errcode`                       create a mapping
+
+`mmap.map(path|fileno, access, size, ` \                        create a mapping
+offset, addr, name) -> map | nil,errmsg,errcode`
+
+`map:flush([wait, ][addr, size]) -> true | nil,errmsg,errcode`  flush (parts of) the mapping to disk
+
+`map.addr`                                                      a `void*` pointer to the mapped address
+
+`map.size`                                                      the byte size of the mapped block
+
+`map.fileno`                                                    the OS file handle
+
+`map:free()`                                                    release the memory and associated resources
+
+`mmap.mirror(t) -> map | nil,errmsg,errcode`                    create a mirrored memory mapping
+
+`mmap.aligned_size(size) -> size`                               align a size to page boundary
+
+`mmap.pagesize() -> size`                                       allocation granularity
+--------------------------------------------------------------- --------------------------------------------
 
 ### `mmap.map(t) -> map | nil, errmsg, errcode` <br> `mmap.map(path|fileno, access, size, offset, addr, name) -> map | nil, errmsg, errcode`
 
