@@ -28,13 +28,13 @@ Features:
 
 ## API
 
---------------------------------------------------------------------------------- --------------------------------------------
+--------------------------------------------------------------------------------- ---------------------------------------------------------------------------------
 `mmap.map(args_t) -> map | nil, errmsg, errcode` \                                create a memory mapping
 `mmap.map(file, access, size, offset, addr, name) -> map | nil, errmsg, errcode`
 
-`map.addr`                                                                        a `void*` pointer to the mapped address
+`map.addr`                                                                        a `void*` pointer to the mapped memory
 
-`map.size`                                                                        the byte size of the mapped block
+`map.size`                                                                        the byte size of the mapped memory
 
 `map:flush([wait, ][addr, size]) -> true | nil, errmsg, errcode`                  flush (parts of) the mapping to disk
 
@@ -52,7 +52,7 @@ Features:
 `mmap.filesize(file) -> size | nil, errmsg, errcode`                              get file size
 
 `mmap.filesize(file, size) -> size | nil, errmsg, errcode`                        (create file and) set file size
---------------------------------------------------------------------------------- --------------------------------------------
+--------------------------------------------------------------------------------- ---------------------------------------------------------------------------------
 
 ### `mmap.map(args_t) -> map | nil, errmsg, errcode` <br> `mmap.map(file, access, size, offset, addr, name)` <br> `-> map | nil, errmsg, errcode`
 
