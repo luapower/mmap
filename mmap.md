@@ -54,7 +54,7 @@ Features:
 `mmap.filesize(file, size) -> size | nil, errmsg, errcode`                        (create file and) set file size
 --------------------------------------------------------------------------------- ---------------------------------------------------------------------------------
 
-### `mmap.map(args_t) -> map | nil, errmsg, errcode` <br> `mmap.map(file, access, size, offset, addr, name)` <br> `-> map | nil, errmsg, errcode`
+### `mmap.map(args_t) -> map | nil, errmsg, errcode` <br> `mmap.map(file, access, size, offset, addr, name) -> map | nil, errmsg, errcode`
 
 Create a memory map object. Args:
 
