@@ -28,35 +28,31 @@ Features:
 
 ## API
 
------------------------------------------------------ --------------------------------------------
-`mmap.map(args_t) -> map | nil,errmsg,errcode` \      create a memory mapping
-`mmap.map(file, access, size, offset, addr, name)` \
-`-> map | nil,errmsg,errcode`
+--------------------------------------------------------------------------------- --------------------------------------------
+`mmap.map(args_t) -> map | nil, errmsg, errcode` \                                create a memory mapping
+`mmap.map(file, access, size, offset, addr, name) -> map | nil, errmsg, errcode`
 
-`map.addr`                                            a `void*` pointer to the mapped address
+`map.addr`                                                                        a `void*` pointer to the mapped address
 
-`map.size`                                            the byte size of the mapped block
+`map.size`                                                                        the byte size of the mapped block
 
-`map:flush([wait, ][addr, size])` \                   flush (parts of) the mapping to disk
-`-> true | nil,errmsg,errcode`
+`map:flush([wait, ][addr, size]) -> true | nil, errmsg, errcode`                  flush (parts of) the mapping to disk
 
-`map:free()`                                          release the memory and associated resources
+`map:free()`                                                                      release the memory and associated resources
 
-`mmap.mirror(args_t)` \                               create a mirrored memory mapping
-`-> map | nil,errmsg,errcode` \
-`mmap.mirror(file, size[, times[, addr]])` \
-`-> map | nil,errmsg,errcode`
+`mmap.mirror(args_t) -> map | nil, errmsg, errcode` \                             create a mirrored memory mapping
+`mmap.mirror(file, size[, times[, addr]]) -> map | nil, errmsg, errcode`
 
-`mmap.pagesize() -> bytes`                            allocation granularity
+`mmap.pagesize() -> bytes`                                                        allocation granularity
 
-`mmap.aligned_size(bytes[, dir]) -> bytes`            next/prev page-aligned size
+`mmap.aligned_size(bytes[, dir]) -> bytes`                                        next/prev page-aligned size
 
-`mmap.aligned_addr(ptr[, dir]) -> ptr`                next/prev page-aligned address
+`mmap.aligned_addr(ptr[, dir]) -> ptr`                                            next/prev page-aligned address
 
-`mmap.filesize(file) -> size | nil,errmsg,errcode` \  get/set file size
-`mmap.filesize(file, size)` \
-`-> size | nil,errmsg,errcode`
------------------------------------------------------ --------------------------------------------
+`mmap.filesize(file) -> size | nil, errmsg, errcode`                              get file size
+
+`mmap.filesize(file, size) -> size | nil, errmsg, errcode`                        (create file and) set file size
+--------------------------------------------------------------------------------- --------------------------------------------
 
 ### `mmap.map(args_t) -> map | nil, errmsg, errcode` <br> `mmap.map(file, access, size, offset, addr, name)` <br> `-> map | nil, errmsg, errcode`
 
