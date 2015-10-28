@@ -8,12 +8,14 @@ tagline: portable memory mapping
 * TODO: map:access(newaccess) to change access flags after mapping.
 * TODO: test flush() with invalid address and/or size (clamp them?)
 * TODO: test exec flag
-* `mmap.mirror(file,size,times,addr)` version
-* huge page support? is this portable? does it require root?
+* TODO: allow file descriptors on Windows too (why not?)
+* TODO: `mmap.mirror(file,size,times,addr)` version
+* TODO: huge page support? is this portable? does it require root?
 
 ## `local mmap = require'mmap'`
 
 Memory mapping API that can be used with Windows, Linux and OSX.
+
 Features:
 
   * file-backed and pagefile-backed (anonymous) memory maps
@@ -21,10 +23,48 @@ Features:
   * name-tagged memory maps for sharing memory between processes
   * mirrored memory maps for using with [lock-free ring buffers][lfrb]
   * synchronous and asynchronous flushing
-  * works with filenames, io file objects, OS file descriptors and OS file handles.
+  * works with filenames, file objects, file descriptors and OS file handles.
 
 
 ## API
+
+----------------------------------------------------------------------------------------------
+`mmap.map(args_t) -> map | nil,errmsg,errcode` \
+`mmap.map(file, access, size, offset, addr, name) -> map | nil, errmsg, errcode` \
+create a memory mapping
+
+`map.addr` \
+a `void*` pointer to the mapped address
+
+`map.size` \
+the byte size of the mapped block
+
+`map:flush([wait, ][addr, size]) -> true | nil, errmsg, errcode` \
+flush (parts of) the mapping to disk
+
+`map:free()` \
+release the memory and associated resources
+
+`mmap.mirror(args_t) -> map | nil, errmsg, errcode` \
+`mmap.mirror(file, size[, times[, addr]]) -> map | nil, errmsg, errcode` \
+create a mirrored memory mapping
+
+`mmap.pagesize() -> bytes` \
+allocation granularity
+
+`mmap.aligned_size(bytes[, dir]) -> bytes` \
+next/prev page-aligned size
+
+`mmap.aligned_addr(ptr[, dir]) -> ptr` \
+next/prev page-aligned address
+
+`mmap.filesize(file) -> size | nil, errmsg, errcode` \
+get file size
+
+`mmap.filesize(file, size) -> size | nil,errmsg,errcode` \
+(create file and) set file size
+----------------------------------------------------------------------------------------------
+
 
 ------------------------------------------------- --------------------------------------------
 `mmap.map(args_t) -> map | nil,errmsg,errcode`    create a mapping
@@ -40,9 +80,6 @@ Features:
 `-> true | nil,errmsg,errcode`
 
 `map:free()`                                      release the memory and associated resources
-
-`mmap.mirror(args_t)` \                           create a mirrored memory mapping
-`-> map | nil,errmsg,errcode`
 
 `mmap.mirror(args_t)` \                           create a mirrored memory mapping
 `-> map | nil,errmsg,errcode`
@@ -71,8 +108,9 @@ Create a memory map object. Args:
 will be mapped instead; it can be:
 	* a utf8 string representing a filename to open.
 	* a `FILE*` object opened in a compatible mode.
-	* a file descriptor opened in a compatible mode.
-	* a HANDLE opened in a compatible mode (Windows).
+		* NOTE: `io.open()` files are `FILE*` objects.
+	* a Unix file descriptor opened in a compatible mode.
+	* a Windows HANDLE opened in a compatible mode.
 * `access`: can be either:
 	* '' (read-only, default)
 	* 'w' (read + write)
@@ -114,16 +152,14 @@ If the mapping fails, returns `nil,errmsg,errcode` where `errcode` can be:
 * `'invalid_address'` - specified address in use.
 * an OS-specific numeric error code.
 
-__NOTE:__ Write buffers are flushed before mapping the file.
+#### NOTE
 
-__NOTE:__ Attempting to write to a memory block that wasn't mapped with
-write or copy-on-write access results in access violation which results
-in a crash since access violations are not caught by default.
-
-__NOTE:__ Any changes done to a mapped file by other processes are not
-guaranteed to be visible on the mapped memory.
-
-__NOTE:__ Access to shared memory from two processes must be synchronized.
+* write buffers are flushed before mapping an already-opened file.
+* attempting to write to a memory block that wasn't mapped with write
+or copy-on-write access results in a crash.
+* changes done externally to a mapped file may not be visible immediately
+(or at all) to the mapped memory.
+* access to shared memory from multiple processes must be synchronized.
 
 
 ### `map:free()`
