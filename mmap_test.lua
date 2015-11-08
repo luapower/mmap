@@ -130,6 +130,7 @@ function test.file_copy_on_write()
 end
 
 function test.file_copy_on_write_live()
+	if ffi.os == 'OSX' then return end
 	os.remove(file)
 	local size = mediumsize
 	local mapw = assert(mmap.map{file = file, access = 'w', size = size})
@@ -237,7 +238,9 @@ function test.invalid_address()
 end
 
 function test.swap_too_short()
-	local map, errmsg, errcode = mmap.map{access = 'w', size = 1024^4}
+	--TODO: OSX
+	if ffi.os == 'OSX' then return end
+	local map, errmsg, errcode = mmap.map{access = 'w', size = size}
 	assert(not map and errcode == 'file_too_short')
 end
 
@@ -294,6 +297,14 @@ end
 
 function test.out_of_mem_linux()
 	if ffi.os ~= 'Linux' then return end
+	--TODO
+end
+
+function test.disk_full_osx()
+	--TODO
+end
+
+function test.out_of_mem_osx()
 	--TODO
 end
 
