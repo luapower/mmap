@@ -806,13 +806,13 @@ function mmap.mirror(t,...)
 		size = size * times,
 		access = access,
 		addr = addr}
-	if not map then return nil, errmsg, errcode end
+	if not map then
+		return nil, errmsg, errcode
+	end
 
 	--now free it so we can allocate it again in chunks all pointing at
 	--the same offset 0 in the file, thus mirroring the same data.
-	local maps = {}
-	maps.addr = map.addr
-	maps.size = size
+	local maps = {addr = map.addr, size = size}
 	map:free()
 
 	local addr = ffi.cast('char*', maps.addr)

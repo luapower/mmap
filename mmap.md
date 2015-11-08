@@ -36,7 +36,7 @@ Limitations:
 
 `map:free()`                                                                        release the memory and associated resources
 
-`mmap.unlink(file)` \                                                               remove the shared memory file from disk (Linux)
+`mmap.unlink(file)` \                                                               remove the shared memory file from disk (Linux, OSX)
 `map:unlink()`
 
 `mmap.mirror(args_t) -> map | nil, errmsg, errcode` \                               create a mirrored memory mapping

@@ -298,7 +298,7 @@ function test.out_of_mem_linux()
 end
 
 
-if not ... then
+if not ... or ... == 'mmap_test' then
 	--run all tests in the order in which they appear in the code.
 	for i,k in ipairs(test) do
 		print('test '..k)
