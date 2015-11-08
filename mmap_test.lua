@@ -240,7 +240,7 @@ end
 function test.swap_too_short()
 	--TODO: OSX
 	if ffi.os == 'OSX' then return end
-	local map, errmsg, errcode = mmap.map{access = 'w', size = size}
+	local map, errmsg, errcode = mmap.map{access = 'w', size = 1024^4}
 	assert(not map and errcode == 'file_too_short')
 end
 
@@ -289,6 +289,7 @@ end
 
 function test.disk_full_linux()
 	if ffi.os ~= 'Linux' then return end
+	if ffi.abi'32bit' then return end --TODO: how to test for disk full on 32bit?
 	local map, errmsg, errcode = mmap.map{file = file,
 		size = 1024^5, --1024 TB
 		access = 'w'}
